@@ -1,4 +1,4 @@
-morocco.github.com
+codeformorocco.org
 ==================
 
 The initiative's website
