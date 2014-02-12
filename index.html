@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Code for Morocco</title>
+		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" />
+		<style type="text/css">
+			body {
+				padding-top:40px;
+			}
+			#contributors {
+				display:none;
+				list-style: none;
+				text-align: left;
+				margin:0 auto;
+				padding:0;
+			}
+			#contributors li{
+				display:inline-block;
+				margin:40px 0 0 0;
+				height:110px;
+				width:120px;
+				text-align: center;
+			}
+			#contributors li:first-child {
+				margin-left:0;
+			}
+			#contributors li a img {
+				margin-bottom: 5px;
+			}
+			footer {
+				text-align: right;
+				padding: 40px 0 20px 0;
+			}
+		</style>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+		<script type="text/javascript">
+			(function(){
+				var getContributors = function(callbackFn, repository){
+					repository = repository || "web-ma";
+					$.get("https://api.github.com/repos/morocco/" + repository + "/contributors", function(data, xhr){
+						callbackFn(data);
+					});
+				};
+				var displayContributors = function() {
+					var $contributorsList = $('#contributors');
+					var template = $('script#contributors-list-item').text();
+
+					getContributors(function(contributors) {
+						$.each(contributors, function(index, contributor) {
+							$(Mustache.to_html(template, contributor)).appendTo($contributorsList);
+						});
+					});
+
+					$contributorsList.show();
+				}
+				var init = function(){
+					displayContributors();
+				};
+				$(document).ready(init);
+			})();
+		</script>
+		<script type="text/template" id="contributors-list-item">
+			<li id="contributor-{{ login }}">
+				<a href="{{ html_url }}">
+					<img class="img-circle" alt="{{ login }}" src="{{ avatar_url }}"/>
+					<div>{{ login }}</div>
+				</a>
+			</li>
+		</script>
+	</head>
+	<body class="container">
+		<div>
+			<div class="jumbotron">
+				<h1>Code for Morocco</h1>
+				<p class="lead">We're a community of designers and coders with the goal of making our government's online properties look and work better for our fellow citizens.</p>
+				<p class="text-left"><a href="http://github.com/morocco" class="btn btn-primary btn-lg" role="button">Show me the code</a></p>
+				<ul id="contributors"></ul>
+			</div>
+			<p>This initiative is the brainchild of <a href="http://startupyourlife.org">Startup Your Life</a>, a Moroccan community of entrepreneurs.
+			<p>We share the firm belief that actions speak better than words. We push code and pixels from New York, Washington DC, Casablanca and Agadir to bring consistency and improve the user experience of the online properties of the Moroccan government.</p>
+			
+		</div>
+		<footer>2014 &copy; Code for Morocco<small class="text-muted"> - not affiliated with any governement, agency or political party</small></footer>
+	</body>
+</html>
